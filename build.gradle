@@ -47,7 +47,7 @@ task dependenciesGraphDot {
 
 task dependenciesGraph(dependsOn: "dependenciesGraphDot", type: Exec) {
     workingDir "$project.buildDir/dependenciesGraph"
-    commandLine "dot", "-O", "-Tpng", "graph.dot"
+    commandLine "dot", "-O", "-T png", "graph.dot"
 }
 
 task clean(type: Delete) {
