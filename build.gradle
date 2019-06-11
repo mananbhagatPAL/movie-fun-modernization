@@ -5,6 +5,7 @@ buildscript {
         hibernateVersion = "5.2.17.Final"
         slf4jVersion = "1.7.25"
         junitVersion = "4.12"
+        mysqlVersion = "5.1.40"
     }
 
     repositories {
@@ -44,12 +45,10 @@ task dependenciesGraphDot {
         dotFile << "}\n"
     }
 }
-
 task dependenciesGraph(dependsOn: "dependenciesGraphDot", type: Exec) {
     workingDir "$project.buildDir/dependenciesGraph"
-    commandLine "dot", "-O", "-T png", "graph.dot"
+    commandLine "dot", "-O", "-Tpng", "graph.dot"
 }
-
 task clean(type: Delete) {
     delete "build"
 }

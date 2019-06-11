@@ -50,21 +50,7 @@ public class AlbumsController {
         return albumsRepository.find(albumId);
     }
 
-//    @PostMapping("/{albumId}/cover")
-//    public String uploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) {
-//        logger.debug("Uploading cover for album with id {}", albumId);
-//
-//        if (uploadedFile.getSize() > 0) {
-//            try {
-//                tryToUploadCover(albumId, uploadedFile);
-//
-//            } catch (IOException e) {
-//                logger.warn("Error while uploading album cover", e);
-//            }
-//        }
-//
-//        return format("redirect:/albums/%d", albumId);
-//    }
+
 
     @GetMapping("/{albumId}/cover")
     public HttpEntity<byte[]> getCover(@PathVariable long albumId) throws IOException, URISyntaxException {
@@ -79,6 +65,22 @@ public class AlbumsController {
 
         return new HttpEntity<>(imageBytes, headers);
     }
+
+    //    @PostMapping("/{albumId}/cover")
+//    public String uploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) {
+//        logger.debug("Uploading cover for album with id {}", albumId);
+//
+//        if (uploadedFile.getSize() > 0) {
+//            try {
+//                tryToUploadCover(albumId, uploadedFile);
+//
+//            } catch (IOException e) {
+//                logger.warn("Error while uploading album cover", e);
+//            }
+//        }
+//
+//        return format("redirect:/albums/%d", albumId);
+//    }
 
 
     private void tryToUploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) throws IOException {
