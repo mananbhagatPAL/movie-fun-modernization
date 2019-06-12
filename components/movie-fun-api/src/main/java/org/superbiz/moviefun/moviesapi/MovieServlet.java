@@ -1,3 +1,19 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.superbiz.moviefun.moviesapi;
 
 import org.springframework.stereotype.Component;
@@ -20,10 +36,10 @@ public class MovieServlet extends HttpServlet {
 
     public static int PAGE_SIZE = 5;
 
-    private MoviesClient moviesClient;
+    private MoviesClient moviesBean;
 
-    public MovieServlet(MoviesClient moviesClient) {
-        this.moviesClient = moviesClient;
+    public MovieServlet(MoviesClient moviesBean) {
+        this.moviesBean = moviesBean;
     }
 
     @Override
@@ -49,7 +65,7 @@ public class MovieServlet extends HttpServlet {
 
             MovieInfo movie = new MovieInfo(title, director, genre, rating, year);
 
-            moviesClient.addMovie(movie);
+            moviesBean.addMovie(movie);
             response.sendRedirect("moviefun");
             return;
 
@@ -57,7 +73,7 @@ public class MovieServlet extends HttpServlet {
 
             String[] ids = request.getParameterValues("id");
             for (String id : ids) {
-                moviesClient.deleteMovieId(new Long(id));
+                moviesBean.deleteMovieId(new Long(id));
             }
 
             response.sendRedirect("moviefun");
@@ -70,11 +86,11 @@ public class MovieServlet extends HttpServlet {
             int count = 0;
 
             if (StringUtils.isEmpty(key) || StringUtils.isEmpty(field)) {
-                count = moviesClient.countAll();
+                count = moviesBean.countAll();
                 key = "";
                 field = "";
             } else {
-                count = moviesClient.count(field, key);
+                count = moviesBean.count(field, key);
             }
 
             int page = 1;
@@ -101,9 +117,9 @@ public class MovieServlet extends HttpServlet {
             List<MovieInfo> range;
 
             if (StringUtils.isEmpty(key) || StringUtils.isEmpty(field)) {
-                range = moviesClient.findAll(start, PAGE_SIZE);
+                range = moviesBean.findAll(start, PAGE_SIZE);
             } else {
-                range = moviesClient.findRange(field, key, start, PAGE_SIZE);
+                range = moviesBean.findRange(field, key, start, PAGE_SIZE);
             }
 
             int end = start + range.size();

@@ -3,13 +3,16 @@ package org.superbiz.moviefun.moviesapi;
 import java.util.Objects;
 
 public class MovieInfo {
-
     private long id;
+
     private String director;
     private String title;
     private int year;
     private String genre;
     private int rating;
+
+    public MovieInfo() {
+    }
 
     public MovieInfo(String title, String director, String genre, int rating, int year) {
         this.director = director;
@@ -23,9 +26,6 @@ public class MovieInfo {
         this.director = director;
         this.title = title;
         this.year = year;
-    }
-
-    public MovieInfo() {
     }
 
     public long getId() {
@@ -55,34 +55,18 @@ public class MovieInfo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof MovieInfo)) return false;
         MovieInfo movieInfo = (MovieInfo) o;
-        return id == movieInfo.id &&
-                year == movieInfo.year &&
-                rating == movieInfo.rating &&
-                director.equals(movieInfo.director) &&
-                title.equals(movieInfo.title) &&
-                genre.equals(movieInfo.genre);
+        return getId() == movieInfo.getId() &&
+                getYear() == movieInfo.getYear() &&
+                getRating() == movieInfo.getRating() &&
+                getDirector().equals(movieInfo.getDirector()) &&
+                getTitle().equals(movieInfo.getTitle()) &&
+                getGenre().equals(movieInfo.getGenre());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, director, title, year, genre, rating);
-    }
-
-    @Override
-    public String toString() {
-        return "MovieInfo{" +
-                "id=" + id +
-                ", director='" + director + '\'' +
-                ", title='" + title + '\'' +
-                ", year=" + year +
-                ", genre='" + genre + '\'' +
-                ", rating=" + rating +
-                '}';
+        return Objects.hash(getId(), getDirector(), getTitle(), getYear(), getGenre(), getRating());
     }
 }
-
-
-
-

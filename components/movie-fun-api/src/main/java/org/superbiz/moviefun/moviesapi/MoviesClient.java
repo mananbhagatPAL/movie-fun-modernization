@@ -1,22 +1,18 @@
 package org.superbiz.moviefun.moviesapi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-
-
-
-
 import static org.springframework.http.HttpMethod.GET;
 
 public class MoviesClient {
-    private final String moviesUrl;
-    private final RestOperations restOperations;
+
+    private String moviesUrl;
+    private RestOperations restOperations;
 
     private static ParameterizedTypeReference<List<MovieInfo>> movieListType = new ParameterizedTypeReference<List<MovieInfo>>() {
     };
@@ -30,36 +26,38 @@ public class MoviesClient {
         restOperations.postForEntity(moviesUrl, movie, MovieInfo.class);
     }
 
-    public void deleteMovieId(long id) {
-        restOperations.delete(moviesUrl + "/" + id);
-    }
-
-    public int count(String field, String searchTerm) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(moviesUrl + "/count")
-                .queryParam("field", field)
-                .queryParam("key", searchTerm);
-
-        return restOperations.getForObject(builder.toUriString(), Integer.class);
+    public void deleteMovieId(Long movieId) {
+        restOperations.delete(moviesUrl + "/" + movieId);
     }
 
     public int countAll() {
         return restOperations.getForObject(moviesUrl + "/count", Integer.class);
     }
 
-    public List<MovieInfo> findAll(int firstResult, int maxResults) {
+
+    public int count(String field, String key) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(moviesUrl + "/count")
+                .queryParam("field", field)
+                .queryParam("key", key);
+
+        return restOperations.getForObject(builder.toUriString(), Integer.class);
+    }
+
+
+    public List<MovieInfo> findAll(int start, int pageSize) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(moviesUrl)
-                .queryParam("start", firstResult)
-                .queryParam("pageSize", maxResults);
+                .queryParam("start", start)
+                .queryParam("pageSize", pageSize);
 
         return restOperations.exchange(builder.toUriString(), GET, null, movieListType).getBody();
     }
 
-    public List<MovieInfo> findRange(String field, String searchTerm, Integer firstResult, Integer maxResults) {
+    public List<MovieInfo> findRange(String field, String key, int start, int pageSize) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(moviesUrl)
-                .queryParam("start", firstResult)
-                .queryParam("pageSize", maxResults)
                 .queryParam("field", field)
-                .queryParam("key", searchTerm);
+                .queryParam("key", key)
+                .queryParam("start", start)
+                .queryParam("pageSize", pageSize);
 
         return restOperations.exchange(builder.toUriString(), GET, null, movieListType).getBody();
     }
@@ -67,5 +65,4 @@ public class MoviesClient {
     public List<MovieInfo> getMovies() {
         return restOperations.exchange(moviesUrl, GET, null, movieListType).getBody();
     }
-
 }

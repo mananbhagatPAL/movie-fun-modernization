@@ -45,10 +45,12 @@ task dependenciesGraphDot {
         dotFile << "}\n"
     }
 }
+
 task dependenciesGraph(dependsOn: "dependenciesGraphDot", type: Exec) {
     workingDir "$project.buildDir/dependenciesGraph"
     commandLine "dot", "-O", "-Tpng", "graph.dot"
 }
+
 task clean(type: Delete) {
     delete "build"
 }
